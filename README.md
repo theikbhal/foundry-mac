@@ -11,6 +11,7 @@ Everything runs on your Mac. Apps, templates, and their SQLite files are stored 
 - [Requirements](#requirements)
 - [Build and run](#build-and-run)
 - [Quick start](#quick-start)
+- [First-run tour](#first-run-tour)
 - [The editor](#the-editor)
 - [Components](#components)
 - [Bindings](#bindings)
@@ -54,6 +55,14 @@ open dist/Foundry.app
 5. Press **Preview** (`⌥⌘P`) to use the app as an end user would.
 
 ![App gallery](docs/screenshots/apps.jpg)
+
+## First-run tour
+
+On first launch, Foundry opens a three-step tour: what the builder does, how SQLite queries connect to component bindings, and where to start from a template or a blank canvas. The tour appears once and is remembered per user.
+
+![First-run tour](docs/screenshots/onboarding.jpg)
+
+Close or skip it at any time, or reopen it later from **Help → Welcome to Foundry**. The final step can jump straight into a template or create a blank app.
 
 ## The editor
 
@@ -263,6 +272,8 @@ Launch flags used for development:
 | `--query` | Combine with `--demo` to open the first query |
 | `--dashboard` | Combine with `--demo` to preview the dashboard layout |
 | `--templates` | Open the template gallery at launch |
+| `--onboarding` | Show the first-run tour even if it was already completed |
+| `--onboarding-step <n>` | Open the tour at step `n` (0–2); combine with `--onboarding` |
 | `--snapshot <path>` | Render the app to a PNG and exit (dev screenshot helper) |
 | `--selftest <path>` | Run the functional template tests and exit |
 
@@ -287,6 +298,12 @@ Sources/Foundry/
 **The app list is empty after a reset.** Apps live in Application Support. Quit Foundry, remove `~/Library/Application Support/Foundry` if you want a clean slate, and relaunch.
 
 **A search or save inserts empty values.** Components start with their configured default values; set explicit defaults in the inspector when a form should begin with data.
+
+**The welcome tour never appears.** It is remembered in user defaults after the first close. Reopen it from **Help → Welcome to Foundry**, or reset the flag while the bundled app is closed:
+
+```sh
+defaults delete app.foundry.local foundry.onboarding.completed
+```
 
 **Preview looks different from the canvas.** Preview renders at 100% with no zoom, grid, selection borders, or hidden components. Zoom controls only affect the design canvas.
 

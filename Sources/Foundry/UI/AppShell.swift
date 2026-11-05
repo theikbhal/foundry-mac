@@ -7,13 +7,30 @@ final class AppShell: ObservableObject {
 
     @Published var editor: EditorModel?
     @Published var showTemplates = false
+    @Published var showOnboarding = false
     @Published var alertMessage: String?
     var presentTemplatesOnLaunch = false
+    var presentOnboardingOnLaunch = false
+    var onboardingStartStep = 0
+
+    private static let onboardingCompletedKey = "foundry.onboarding.completed"
 
     let store = AppStore.shared
 
     init() {
         let arguments = ProcessInfo.processInfo.arguments
+        if arguments.contains("--onboarding") {
+            presentOnboardingOnLaunch = true
+            if let stepIndex = arguments.firstIndex(of: "--onboarding-step"),
+               arguments.indices.contains(stepIndex + 1),
+               let value = Int(arguments[stepIndex + 1]) {
+                onboardingStartStep = value
+            }
+        } else if !UserDefaults.standard.bool(forKey: Self.onboardingCompletedKey),
+                  !Self.isDevLaunch(arguments) {
+            presentOnboardingOnLaunch = true
+        }
+
         if arguments.contains("--demo") {
             let base: AppDocument
             if let existing = store.listApps().first {
@@ -33,6 +50,22 @@ final class AppShell: ObservableObject {
         } else if arguments.contains("--templates") {
             presentTemplatesOnLaunch = true
         }
+    }
+
+    private static func isDevLaunch(_ arguments: [String]) -> Bool {
+        ["--demo", "--templates", "--selftest", "--snapshot"].contains { arguments.contains($0) }
+    }
+
+    func finishOnboarding() {
+        UserDefaults.standard.set(true, forKey: Self.onboardingCompletedKey)
+        withAnimation(.easeInOut(duration: 0.18)) {
+            showOnboarding = false
+        }
+    }
+
+    func openOnboarding() {
+        onboardingStartStep = 0
+        showOnboarding = true
     }
 
     /// Dev-only: render the dashboard template against the demo app's seeded

@@ -30,6 +30,9 @@ struct FoundryApp: App {
                     .keyboardShortcut("b", modifiers: [.command, .shift])
                     .disabled(shell.editor == nil)
             }
+            CommandGroup(replacing: .help) {
+                Button("Welcome to Foundry") { shell.openOnboarding() }
+            }
         }
     }
 }
