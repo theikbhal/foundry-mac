@@ -258,7 +258,6 @@ struct InspectorView: View {
                 shortcutRow("New app", "⌘N")
                 shortcutRow("Templates", "⇧⌘T")
                 shortcutRow("Import template", "⇧⌘I")
-                shortcutRow("Delete component", "⌫")
             }
         }
     }
@@ -1071,7 +1070,7 @@ private struct InspectorStateRow: View {
                 .font(.system(size: 9.5, design: .monospaced))
                 .foregroundStyle(Theme.blue)
                 .lineLimit(1)
-                .frame(width: 92, alignment: .leading)
+                .frame(width: 116, alignment: .leading)
 
             TextField("value", text: $text)
                 .textFieldStyle(.plain)

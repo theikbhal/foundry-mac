@@ -569,7 +569,7 @@ final class EditorModel: ObservableObject {
         let path = connection.path
         let start = Date()
         let result = await Task.detached(priority: .userInitiated) { () -> Result<SQLiteResult, Error> in
-            Result { try SQLiteEngine.query(sql, path: path) }
+            Result { try SQLiteEngine.query(sql, path: path, readOnly: query.readOnly) }
         }.value
         let duration = Date().timeIntervalSince(start) * 1000
 
